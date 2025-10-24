@@ -1,4 +1,75 @@
-section > img {
-  width: 50px;
-  height: 50px;
+* {
+  margin: 0;
+}
+
+main {
+  height: 80%;
+  width: 50%;
+  border: solid;
+  border-radius: 20px;
+  background-color: #E9965B;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  flex-direction: column;
+}
+
+.header {
+  display: flex;
+  gap: 20px;
+}
+
+.header > img {
+  width: 352px;
+  height: 131px;
+}
+
+h1, p {
+  color: #1A1A1A;
+  font-family: "Quicksand";
+}
+
+.header-text {
+  gap: 20px;
+}
+
+.header-text > p {
+  max-width: 150px;
+  font-weight: 450;
+}
+
+
+.feature-image {
+  width: 100px;
+  height: 100px;
+}
+
+.features {
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+}
+
+.features > section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 150px;
+  height: 200px;
+  border: solid;
+  border-radius: 10px;
+  background-color: #FAF3E0;
+  box-shadow: #2C2C2C 5px 2px;
+  text-align: center;
+}
+
+.features > section > h1 {
+  font-size: 20px;
+}
+
+.features > section > button {
+  background: none;
+  border: none;
+  cursor: pointer
 }

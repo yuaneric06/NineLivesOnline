@@ -1,5 +1,9 @@
-export default function About() {
+import './About.css'
+
+export default function About(props) {
     return (
-        <img src="/src/media/about-bowl.png" alt="About" />
+        <main>
+            <p>Hello from about!</p>
+        </main>
     )
 }

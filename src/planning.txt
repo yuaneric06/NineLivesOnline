@@ -1,0 +1,11 @@
+main sections:
+    blog
+    generate image
+    about me
+    super secret life missions
+
+
+main page will have four cat bowls at each corner
+generate and blog will lead to seperate webpages
+use react router to navigate endpoints
+

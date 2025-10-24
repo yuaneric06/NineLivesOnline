@@ -1,5 +1,7 @@
-export default function Mission() {
+export default function Mission(props) {
     return (
-        <img src="/src/media/mission-bowl.png" alt="Missions"/>
+        <>
+            
+        </>
     )
 }

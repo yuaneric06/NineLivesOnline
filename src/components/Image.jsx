@@ -1,5 +1,7 @@
-export default function Image() {
+export default function Image(props) {
     return (
-        <img src="/src/media/generate-img-bowl.png" alt="Get cat image"/>
+        <>
+            
+        </>
     )
 }
