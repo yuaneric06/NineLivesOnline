@@ -1,8 +1,22 @@
 import './Blog.css'
 import BlogButton from './BlogButton.jsx'
-import { useState } from 'react'
+import { Outlet, useNavigate } from 'react-router'
+import { blogText } from './blogText.js'
 
-export default function About(props) {
+export default function Blog(props) {
+    const navigate = useNavigate();
+    /**
+     * take in url, title, media for button
+     */
+    const blogButtonElements = blogText.map(obj => {
+        return <BlogButton 
+            key={obj.url}
+            title={obj.title} 
+            media={obj.media} 
+            mediaAlt={obj.mediaAlt}
+            handleClick={() => navigate(obj.url)}
+        />
+    })
 
     return (
         <main>
@@ -17,10 +31,10 @@ export default function About(props) {
 
 
             <section className="blog-entries">
-                <BlogButton />
-                <BlogButton />
-                <BlogButton />
+                {blogButtonElements}
             </section>
+
+            <Outlet />
         </main>
     )
 }

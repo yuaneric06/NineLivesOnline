@@ -1,8 +1,12 @@
-export default function BlogEntry() {
+export default function BlogButton(props) {
     return (
         <div className="blog-entry">
-            <h2>Blog description</h2>
-            <img src="/src/media/caligo-paw.png" alt="caligo paw" />
+            <h2>{props.title}</h2>
+            <img 
+                onClick={props.handleClick} 
+                src={props.media} 
+                alt={props.mediaAlt} 
+            />
         </div>
     )
 }
