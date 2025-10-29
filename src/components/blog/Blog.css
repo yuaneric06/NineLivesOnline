@@ -1,0 +1,43 @@
+* {
+    margin: 0;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+}
+h2, p {
+    font-family: "Quicksand";
+}
+
+.header-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  gap: 5px;
+}
+
+.blog-entries {
+    display: flex;
+    flex-direction: row;
+    gap: 40px;
+    width: 600px;
+    overflow: auto;
+}
+
+.blog-entry {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.blog-entry > img {
+    width: 100px;
+    height: 100px;
+}

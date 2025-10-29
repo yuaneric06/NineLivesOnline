@@ -1,6 +1,9 @@
 import './App.css'
+import Feature from './components/Feature.jsx'
+import { useNavigate } from 'react-router'
 
 export default function App() {
+  const navigate = useNavigate();
 
   return (
     <main>
@@ -16,38 +19,33 @@ export default function App() {
       </header>
 
       <section className="features">
-        <section className="about-section">
-          <h1>
-            Learn more about me
-          </h1>
-          <button>
-            <img className="feature-image" src="/src/media/about-bowl.png" alt="About" />
-          </button>
-        </section>
-        <section className="blog-section">
-          <h1>
-            A day in the life
-          </h1>
-          <button>
-            <img className="feature-image" src="/src/media/blog-bowl.png" alt="Blog" />
-          </button>
-        </section>
-        <section className="generate-section">
-          <h1>
-            Live cat camera
-          </h1>
-          <button>
-            <img className="feature-image" src="/src/media/generate-img-bowl.png" alt="Generate cat picture" />
-          </button>
-        </section>
-        <section className="mission-section">
-          <h1>
-            Super secret missions
-          </h1>
-          <button>
-            <img className="feature-image" src="/src/media/mission-bowl.png" alt="Missions" />
-          </button>
-        </section>
+        <Feature 
+          name="about" 
+          text="Learn more about me" 
+          img="/src/media/about-bowl.png" 
+          handleClick={() => navigate("/about")}
+        />
+
+        <Feature 
+          name="blog" 
+          text="A day in the life" 
+          img="/src/media/blog-bowl.png" 
+          handleClick={() => navigate("/blog")}
+        />
+        
+        <Feature 
+          name="image" 
+          text="Live cat camera" 
+          img="/src/media/image-bowl.png"
+          handleClick={() => navigate("/image")}
+        />
+        
+        <Feature 
+          name="mission" 
+          text="Super secret missions" 
+          img="/src/media/mission-bowl.png"
+          handleClick={() => navigate("/mission")}
+        />
       </section>
     </main>
   )

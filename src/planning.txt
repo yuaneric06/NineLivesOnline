@@ -9,3 +9,17 @@ main page will have four cat bowls at each corner
 generate and blog will lead to seperate webpages
 use react router to navigate endpoints
 
+render the components on the main screen statically
+use components to render the seperate endpoints
+
+
+about me facts:
+born date
+weight
+favorite foods
+hobbies
+human tier list
+
+displaying facts: 
+once the cursor hovers over a food bowl, make an "explosion"
+in this "explosion" display the facts
