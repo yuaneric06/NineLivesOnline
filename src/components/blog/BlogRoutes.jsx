@@ -9,7 +9,17 @@ export default function BlogRoutes() {
      */
     const blogRoutes = blogText.map(obj => {
         console.log(obj.url);
-        return <Route path={obj.url} element={<BlogEntry title={obj.title} />} />
+        return <Route 
+            path={obj.url} 
+            element={
+                <BlogEntry 
+                    title={obj.title}
+                    content={obj.content}
+                    media={obj.media}
+                    mediaAlt={obj.mediaAlt}
+                />
+            } 
+        />
     })
 
     return (

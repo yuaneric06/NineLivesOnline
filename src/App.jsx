@@ -7,7 +7,7 @@ export default function App() {
 
   return (
     <main>
-      <header className="header">
+      <header className="app-header">
         <img src="/src/media/caligo.png" alt="picture of caligo cat" />
         <span className="header-text">
           <h1>Hello</h1>
@@ -18,7 +18,7 @@ export default function App() {
         </span>
       </header>
 
-      <section className="features">
+      <section className="app-features">
         <Feature 
           name="about" 
           text="Learn more about me" 
@@ -37,7 +37,7 @@ export default function App() {
           name="image" 
           text="Live cat camera" 
           img="/src/media/image-bowl.png"
-          handleClick={() => navigate("/image")}
+          handleClick={() => navigate("/cat-cam")}
         />
         
         <Feature 
