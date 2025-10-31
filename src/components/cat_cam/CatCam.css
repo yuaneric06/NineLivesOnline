@@ -2,17 +2,38 @@
     margin: 0;
 }
 
-main {
+.cat-cam-main {
     display: flex;
     justify-content: flex-start;
     gap: 20px;
 }
 
-header {
+.cat-cam-header {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     margin: 20px;
     gap: 20px;
     text-align: center;
+}
+
+.cat-cam-input {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 100px;
+    background: none;
+    border: black;
+    resize: none;
+    font-family: "Quicksand";
+    font-size: 1.5rem;
+    font-weight: 600;
+    overflow: wrap;
+}
+
+.cat-cam-button {
+    height: 100px;
+    width: 200px;
+    border-radius: 15px;
 }

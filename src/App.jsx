@@ -34,17 +34,10 @@ export default function App() {
         />
         
         <Feature 
-          name="image" 
-          text="Live cat camera" 
-          img="/src/media/image-bowl.png"
-          handleClick={() => navigate("/cat-cam")}
-        />
-        
-        <Feature 
-          name="mission" 
-          text="Super secret missions" 
-          img="/src/media/mission-bowl.png"
-          handleClick={() => navigate("/mission")}
+          name="game" 
+          text="Catch the rat game" 
+          img="/src/media/game-bowl.png"
+          handleClick={() => navigate("/game")}
         />
       </section>
     </main>
