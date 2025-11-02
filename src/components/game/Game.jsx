@@ -15,7 +15,7 @@ export default function Game() {
 
 
     const drawBoard = () => {
-        const catIconSize = Math.min(canvasWidth / width, canvasHeight / height);
+        const playerIconSize = Math.min(canvasWidth / width, canvasHeight / height);
         const edgeOnTop = game.current.edgeOnTop;
         const edgeOnLeft = game.current.edgeOnLeft;
 
@@ -28,6 +28,14 @@ export default function Game() {
 
         ctx.strokeStyle = 'black';
         ctx.lineWidth = 4;
+
+        const image = new Image(playerIconSize, playerIconSize);
+        const playerRowPos = playerPos[0] * cellHeight;
+        const playerColPos = playerPos[1] * cellWidth;
+        image.onload = () => {
+            ctx.drawImage(image, playerColPos, playerRowPos, image.width, image.height);
+        };
+        image.src = '/src/media/game-cat.png';
 
         for (let row = 0; row < height; row++) {
             for (let col = 0; col < width; col++) {
@@ -61,20 +69,29 @@ export default function Game() {
         ctx.stroke();
     }
 
-    const checkBounds = (row, col) => {
-        return row >= 0 && col >= 0 && row < height && col < width;
+    const checkBounds = (row, col, prevRow, prevCol) => {
+        if (row < 0 || col < 0 || row >= height || col >= width) return false;
+        // check if there is a wall between curr pos and prev pos
+        const edgeOnTop = game.current.edgeOnTop;
+        const edgeOnLeft = game.current.edgeOnLeft;
+        const isHorizantalEdge = col === prevCol;
+        if ((isHorizantalEdge && edgeOnTop[Math.max(row, prevRow)][col])
+            || (!isHorizantalEdge && edgeOnLeft[row][Math.max(col, prevCol)])) {
+            return false;
+        }
+        return true;
     }
 
     const handleKeyDown = (event) => {
         const key = event.key;
-        
+
         setPlayerPos(([currRow, currCol]) => {
             let newRow = currRow;
             let newCol = currCol;
-            if (key === 'w' && checkBounds(currRow - 1, currCol)) newRow--;
-            else if (key === 'a' && checkBounds(currRow, currCol - 1)) newCol--;
-            else if (key === 's' && checkBounds(currRow + 1, currCol)) newRow++;
-            else if (key === 'd' && checkBounds(currRow, currCol + 1)) newCol++;
+            if (key === 'w' && checkBounds(currRow - 1, currCol, currRow, currCol)) newRow--;
+            else if (key === 'a' && checkBounds(currRow, currCol - 1, currRow, currCol)) newCol--;
+            else if (key === 's' && checkBounds(currRow + 1, currCol, currRow, currCol)) newRow++;
+            else if (key === 'd' && checkBounds(currRow, currCol + 1, currRow, currCol)) newCol++;
             console.log("setting new player position to %d %d from %d %d", newRow, newCol, currRow, currCol);
             return [newRow, newCol];
         })
