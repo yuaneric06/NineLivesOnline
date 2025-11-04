@@ -1,6 +1,6 @@
 import './game.css'
 import { useRef, useEffect, useState } from 'react'
-import generateMaze from './game.js'
+import { generateMaze, getRatInitialPos, calculateDistanceArr, moveRat } from './game.js'
 
 export default function Game() {
     const canvasWidth = 600;
@@ -11,7 +11,9 @@ export default function Game() {
     const canvasRef = useRef(null);
     const [playerPos, setPlayerPos] = useState([Math.floor(Math.random() * height),
     Math.floor(Math.random() * width)]); // x: y, row : col
+    const ratPos = useRef(null);
     const game = useRef(generateMaze(width, height));
+
 
 
     const drawBoard = () => {
@@ -29,18 +31,41 @@ export default function Game() {
         ctx.strokeStyle = 'black';
         ctx.lineWidth = 4;
 
-        const image = new Image(playerIconSize, playerIconSize);
+        const playerImage = new Image(playerIconSize, playerIconSize);
         const playerRowPos = playerPos[0] * cellHeight;
         const playerColPos = playerPos[1] * cellWidth;
-        image.onload = () => {
-            ctx.drawImage(image, playerColPos, playerRowPos, image.width, image.height);
+        playerImage.onload = () => {
+            ctx.drawImage(playerImage,
+                playerColPos,
+                playerRowPos,
+                playerImage.width,
+                playerImage.height);
         };
-        image.src = '/src/media/game-cat.png';
+        playerImage.src = '/src/media/game-cat.png';
+
+        const ratImage = new Image(playerIconSize, playerIconSize);
+        const ratRowPos = ratPos.current[0] * cellHeight;
+        const ratColPos = ratPos.current[1] * cellWidth;
+        ratImage.onload = () => {
+            ctx.drawImage(ratImage,
+                ratColPos,
+                ratRowPos,
+                ratImage.width,
+                ratImage.height);
+        };
+        ratImage.src = '/src/media/game-rat.png';
+
+        // debugging purposes
+        const distanceArr = calculateDistanceArr(edgeOnTop, edgeOnLeft, playerPos[0], playerPos[1]);
 
         for (let row = 0; row < height; row++) {
             for (let col = 0; col < width; col++) {
                 const upperLeftX = col * cellWidth;
                 const upperLeftY = row * cellHeight;
+
+                // debugging purposes
+                ctx.fillText(distanceArr[row][col].toString(), upperLeftX + cellWidth / 2, upperLeftY + cellHeight / 2);
+
                 // console.log("row ", row, " col ", col);
                 if (edgeOnTop[row][col]) {
                     // draws from left to right
@@ -70,7 +95,7 @@ export default function Game() {
     }
 
     const checkBounds = (row, col, prevRow, prevCol) => {
-        if (row < 0 || col < 0 || row >= height || col >= width) return false;
+        if (row < 0 || col < 0 || row >= height || col >= width) return true;
         // check if there is a wall between curr pos and prev pos
         const edgeOnTop = game.current.edgeOnTop;
         const edgeOnLeft = game.current.edgeOnLeft;
@@ -92,7 +117,16 @@ export default function Game() {
             else if (key === 'a' && checkBounds(currRow, currCol - 1, currRow, currCol)) newCol--;
             else if (key === 's' && checkBounds(currRow + 1, currCol, currRow, currCol)) newRow++;
             else if (key === 'd' && checkBounds(currRow, currCol + 1, currRow, currCol)) newCol++;
+            if (newRow === -1) newRow += height;
+            else if (newRow === height) newRow -= height;
+            else if (newCol === -1) newCol += width;
+            else if (newCol === width) newCol -= width;
             console.log("setting new player position to %d %d from %d %d", newRow, newCol, currRow, currCol);
+            ratPos.current = moveRat(game.current.edgeOnTop, 
+                game.current.edgeOnLeft, 
+                newRow, newCol, 
+                ratPos.current[0], 
+                ratPos.current[1]);
             return [newRow, newCol];
         })
     }
@@ -100,6 +134,7 @@ export default function Game() {
 
     // initializer 
     useEffect(() => {
+        ratPos.current = getRatInitialPos(width, height, playerPos[0], playerPos[1]);
         drawBoard();
         const listener = (event) => handleKeyDown(event);
         document.addEventListener('keydown', listener);
