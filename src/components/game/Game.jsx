@@ -1,18 +1,21 @@
 import './game.css'
 import { useRef, useEffect, useState } from 'react'
 import { generateMaze, getRatInitialPos, calculateDistanceArr, moveRat } from './game.js'
+import { useWindowSize } from 'react-use'
+import Confetti from 'react-confetti'
 
 export default function Game() {
     const canvasWidth = 600;
     const canvasHeight = 400;
-    const width = 15;
-    const height = 10;
+    const width = 6;
+    const height = 4;
 
     const canvasRef = useRef(null);
     const [playerPos, setPlayerPos] = useState([Math.floor(Math.random() * height),
     Math.floor(Math.random() * width)]); // x: y, row : col
     const ratPos = useRef(null);
     const game = useRef(generateMaze(width, height));
+    const gameOver = useRef(false);
 
 
 
@@ -43,20 +46,22 @@ export default function Game() {
         };
         playerImage.src = '/src/media/game-cat.png';
 
-        const ratImage = new Image(playerIconSize, playerIconSize);
-        const ratRowPos = ratPos.current[0] * cellHeight;
-        const ratColPos = ratPos.current[1] * cellWidth;
-        ratImage.onload = () => {
-            ctx.drawImage(ratImage,
-                ratColPos,
-                ratRowPos,
-                ratImage.width,
-                ratImage.height);
-        };
-        ratImage.src = '/src/media/game-rat.png';
+        if (!gameOver.current) {
+            const ratImage = new Image(playerIconSize, playerIconSize);
+            const ratRowPos = ratPos.current[0] * cellHeight;
+            const ratColPos = ratPos.current[1] * cellWidth;
+            ratImage.onload = () => {
+                ctx.drawImage(ratImage,
+                    ratColPos,
+                    ratRowPos,
+                    ratImage.width,
+                    ratImage.height);
+            };
+            ratImage.src = '/src/media/game-rat.png';
+        }
 
         // debugging purposes
-        const distanceArr = calculateDistanceArr(edgeOnTop, edgeOnLeft, playerPos[0], playerPos[1]);
+        // const distanceArr = calculateDistanceArr(edgeOnTop, edgeOnLeft, playerPos[0], playerPos[1]);
 
         for (let row = 0; row < height; row++) {
             for (let col = 0; col < width; col++) {
@@ -64,7 +69,7 @@ export default function Game() {
                 const upperLeftY = row * cellHeight;
 
                 // debugging purposes
-                ctx.fillText(distanceArr[row][col].toString(), upperLeftX + cellWidth / 2, upperLeftY + cellHeight / 2);
+                // ctx.fillText(distanceArr[row][col].toString(), upperLeftX + cellWidth / 2, upperLeftY + cellHeight / 2);
 
                 // console.log("row ", row, " col ", col);
                 if (edgeOnTop[row][col]) {
@@ -108,6 +113,7 @@ export default function Game() {
     }
 
     const handleKeyDown = (event) => {
+        if (gameOver.current) return;
         const key = event.key;
 
         setPlayerPos(([currRow, currCol]) => {
@@ -122,15 +128,18 @@ export default function Game() {
             else if (newCol === -1) newCol += width;
             else if (newCol === width) newCol -= width;
             console.log("setting new player position to %d %d from %d %d", newRow, newCol, currRow, currCol);
-            ratPos.current = moveRat(game.current.edgeOnTop, 
-                game.current.edgeOnLeft, 
-                newRow, newCol, 
-                ratPos.current[0], 
+            ratPos.current = moveRat(game.current.edgeOnTop,
+                game.current.edgeOnLeft,
+                newRow, newCol,
+                ratPos.current[0],
                 ratPos.current[1]);
+            if (ratPos.current[0] === newRow && ratPos.current[1] === newCol ||
+                ratPos.current[0] === currRow && ratPos.current[1] === currCol) {
+                gameOver.current = true;
+            }
             return [newRow, newCol];
         })
     }
-
 
     // initializer 
     useEffect(() => {
@@ -146,9 +155,27 @@ export default function Game() {
         drawBoard();
     }, [playerPos]);
 
+    const handleGameWon = () => {
+        return <section className="game-over">
+            <h1>You won!</h1>
+            <button className="play-again-button"
+                onClick={() => {
+                    gameOver.current = false;
+                    ratPos.current = getRatInitialPos(width, height, playerPos[0], playerPos[1]);
+                    setPlayerPos([Math.floor(Math.random() * height), Math.floor(Math.random() * width)]);
+                }}>Play again</button>
+        </section>
+    }
+    const { windowWidth, windowHeight } = useWindowSize()
     return (
         <main>
             <h1>Game</h1>
+            {gameOver.current && <Confetti
+                width={windowWidth}
+                height={windowHeight}
+                recycle={false}
+            />}
+            {gameOver.current && handleGameWon()}
             <canvas ref={canvasRef} className="game-area" />
         </main>
     )
